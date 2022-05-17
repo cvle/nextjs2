@@ -18,4 +18,4 @@ jobs:
         status: completed
         conclusion: failure
         output: |
-          {"summary": "Waiting for approvals and merge label", "text_description": "afawgfag"}
+          {"title: "awfwaf", "summary": "Waiting for approvals and merge label"}
