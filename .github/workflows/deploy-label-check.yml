@@ -16,6 +16,6 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Merge PR
         status: completed
-        conclusion: failed
+        conclusion: failure
         output: |
           {"summary": "Waiting for approvals and merge label", "text_description": "afawgfag"}
