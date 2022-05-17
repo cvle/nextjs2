@@ -17,4 +17,4 @@ jobs:
         name: Merge PR
         status: in_progress
         output: |
-          {"summary": "Waiting for approvals and merge label"}
+          {"summary": "Waiting for approvals and merge label", "text_description": "afawgfag"}
