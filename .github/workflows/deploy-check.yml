@@ -1,6 +1,6 @@
 name: "deploy-check"
 on:
-  push:
+  pull_request:
     branches:    
       - 'staging'
 permissions: write-all
