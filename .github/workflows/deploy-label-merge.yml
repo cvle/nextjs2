@@ -10,11 +10,14 @@ on:
 permissions: write-all
 
 jobs:
-  deply_check:
+  deploy_label_merge:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - uses: hmarr/debug-action@v2
-    - run: "curl -H 'Accept: application/vnd.github.v3+json' 'https://api.github.com/repos/cvle/nextjs2/commits/staging/check-runs?check_name=Merge%20PR'"
-      id: checks
-    - run: echo ${{ steps.checks.outputs.total_count }}
+    - name: Find Merge check
+      id: check
+      run: |
+        id=$(curl -sH 'Accept: application/vnd.github.v3+json' 'https://api.github.com/repos/cvle/nextjs2/commits/staging/check-runs?check_name=Merge%20PR')
+        echo "::set-output name=id::$id"
+    - run: echo ${{ steps.check.outputs.id }}

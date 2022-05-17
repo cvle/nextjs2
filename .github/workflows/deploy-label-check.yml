@@ -6,7 +6,7 @@ on:
 permissions: write-all
 
 jobs:
-  deply_check:
+  deploy_label_check:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
