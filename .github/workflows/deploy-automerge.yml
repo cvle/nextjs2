@@ -29,4 +29,4 @@ jobs:
           MERGE_LABELS: automerge
           MERGE_METHOD: merge
           MERGE_DELETE_BRANCH: false
-          MERGE_REQUIRED_APPROVALS: 2
+          MERGE_REQUIRED_APPROVALS: 1
