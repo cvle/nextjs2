@@ -14,8 +14,6 @@ jobs:
     - uses: LouisBrunner/checks-action@v1.2.0
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Merge PR
+        name: Wait for Merge Label
         status: completed
-        conclusion: failure
-        output: |
-          {"title": "awfwaf", "summary": "Waiting for approvals and merge label", "text": "afojwafo"}
+        conclusion: in_progress
