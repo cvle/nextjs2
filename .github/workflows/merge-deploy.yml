@@ -14,7 +14,7 @@ on:
       - unlabeled
       - ready_for_review
     branches:    
-      - 'staging'
+      - 'production'
 
 jobs:
   automerge:
