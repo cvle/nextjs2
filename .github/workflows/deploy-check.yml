@@ -1,5 +1,8 @@
 name: "deploy-check"
-on: [push]
+on:
+  push:
+    branches:    
+      - 'staging'
 permissions: write-all
 
 
@@ -12,5 +15,5 @@ jobs:
     - uses: LouisBrunner/checks-action@v1.2.0
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Test XYZ
+        name: Merge PR
         conclusion: ${{ job.status }}
