@@ -5,15 +5,12 @@ on:
       - 'production'
 permissions: write-all
 
-
 jobs:
   deply_check:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - uses: hmarr/debug-action@v2
-    - uses: LouisBrunner/checks-action@v1.2.0
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        name: Merge PR
-        conclusion: ${{ job.status }}
+    - run: "curl -H 'Accept: application/vnd.github.v3+json' 'https://api.github.com/repos/cvle/nextjs2/commits/staging/check-runs?check_name=Merge%20PR'"
+      id: checks
+    - run: echo ${{ steps.checks.outputs.total_count }}
