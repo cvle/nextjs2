@@ -14,5 +14,5 @@ jobs:
     - uses: LouisBrunner/checks-action@v1.2.0
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Wait for Merge Label
+        name: Waiting for Merge Label
         status: in_progress

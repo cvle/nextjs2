@@ -18,7 +18,7 @@ jobs:
     - name: Find Merge check
       id: check
       run: |
-        id=$(curl -sH 'Accept: application/vnd.github.v3+json' 'https://api.github.com/repos/cvle/nextjs2/commits/staging/check-runs?check_name=Wait%20for%20Merge%20Label' | jq '.check_runs[0].id')
+        id=$(curl -sH 'Accept: application/vnd.github.v3+json' 'https://api.github.com/repos/cvle/nextjs2/commits/staging/check-runs?check_name=Waiting%20for%20Merge%20Label' | jq '.check_runs[0].id')
         echo "::set-output name=id::$id"
     - uses: LouisBrunner/checks-action@v1.2.0
       with:
