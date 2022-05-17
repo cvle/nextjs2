@@ -7,8 +7,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - uses: hmarr/debug-action@v2
-    - uses: LouisBrunner/checks-action@v1.1.1
-      if: always()
+    - uses: LouisBrunner/checks-action@v1.2.0
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Test XYZ
