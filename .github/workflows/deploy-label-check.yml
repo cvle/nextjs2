@@ -15,5 +15,4 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Merge PR
-        status: completed
-        conclusion: success
+        status: in_progress

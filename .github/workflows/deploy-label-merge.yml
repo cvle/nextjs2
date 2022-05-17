@@ -25,4 +25,5 @@ jobs:
         check_id: ${{ steps.check.outputs.id }}
         token: ${{ secrets.GITHUB_TOKEN }}
         name: Merge PR
-        status: in_progress
+        status: completed
+        conclusion: success
