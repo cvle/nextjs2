@@ -1,25 +1,39 @@
-name: "deploy-check"
+name: "Deploy Auto Merge"
 on:
   pull_request_review:
     branches:    
       - 'production'
   pull_request:
-    types: [labeled, unlabeled]
+    types: 
+      - opened
+      - synchronize
+      - labeled
+      - unlabeled
     branches:    
       - 'production'
 permissions: write-all
 
 jobs:
-  deploy_label_merge:
+  automerge:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - uses: hmarr/debug-action@v2
+    # Create Auto Merge Check
+    - uses: LouisBrunner/checks-action@v1.2.0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: Deploy Auto Merge
+        status: in_progress
+      continue-on-error: true
+    #
     - name: Find Merge check
       id: check
       run: |
         id=$(curl -sH 'Accept: application/vnd.github.v3+json' 'https://api.github.com/repos/cvle/nextjs2/commits/staging/check-runs?check_name=Waiting%20for%20Merge%20Label' | jq '.check_runs[0].id')
         echo "::set-output name=id::$id"
+
+
     - uses: LouisBrunner/checks-action@v1.2.0
       with:
         check_id: ${{ steps.check.outputs.id }}
