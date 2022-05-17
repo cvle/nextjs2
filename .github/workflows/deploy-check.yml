@@ -1,5 +1,7 @@
 name: "deploy-check"
 on: [push]
+permissions: write-all
+
 
 jobs:
   deply_check:
