@@ -1,15 +1,15 @@
-name: Deploy Automerge Label
+name: Require automerge Label
 on:
   pull_request:
     types: [opened, labeled, unlabeled, synchronize]
     branches:    
       - 'production'
 jobs:
-  label:
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: mheap/github-action-required-labels@v1
         with:
           mode: exactly
           count: 1
-          labels: "automerge"
+          labels: automerge
