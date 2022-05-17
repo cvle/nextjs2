@@ -14,7 +14,7 @@ on:
 permissions: write-all
 
 jobs:
-  run:
+  check:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -23,14 +23,14 @@ jobs:
     - uses: LouisBrunner/checks-action@v1.2.0
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        name: Deploy Auto Merge
+        name: automerge
         status: in_progress
       continue-on-error: true
     #
     - name: Find Merge check
       id: check
       run: |
-        id=$(curl -sH 'Accept: application/vnd.github.v3+json' 'https://api.github.com/repos/cvle/nextjs2/commits/staging/check-runs?check_name=Deploy%20Auto%20Merge' | jq '.check_runs[0].id')
+        id=$(curl -sH 'Accept: application/vnd.github.v3+json' 'https://api.github.com/repos/cvle/nextjs2/commits/staging/check-runs?check_name=automerge' | jq '.check_runs[0].id')
         echo "::set-output name=id::$id"
 
 
