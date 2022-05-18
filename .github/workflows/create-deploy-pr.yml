@@ -11,6 +11,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: main
+          fetch-depth: 0
       # Prepare staging branch to point to HEAD of main.
 
       # Delete staging branch if it already exists.
@@ -21,7 +22,7 @@ jobs:
       - name: Create new staging branch from main
         run: git checkout -b "staging"
       - name: Fetch production branch
-        run: git fetch --no-tags --prune --progress --no-recurse-submodules --depth=1 origin +refs/heads/production*:refs/remotes/origin/production*
+        run: git fetch origin production
       - name: Merge production
         run: git merge origin/production --ff -m "Merge branch 'production' into staging"
       - name: Force push changes
