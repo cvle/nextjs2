@@ -28,9 +28,8 @@ jobs:
           MERGE_ERROR_FAIL: true
           UPDATE_LABELS: "disable"
       - uses: LouisBrunner/checks-action@v1.2.0
-        id: check
         if: failure()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: automerge
+          check_id: ${{ steps.check.outputs.check_id }}
           conclusion: failure
