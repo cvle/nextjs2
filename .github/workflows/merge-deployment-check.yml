@@ -1,0 +1,19 @@
+name: Merge Deployment
+permissions: write-all
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    branches:    
+      - production
+jobs:
+  merge-deployment-check:
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'merge deployment') }}
+    steps:
+      - uses: LouisBrunner/checks-action@v1.2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: Merge Deployment Attempt
+          conclusion: neutral
