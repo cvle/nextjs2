@@ -1,0 +1,17 @@
+name: Sleep
+on:
+  pull_request:
+    types:
+      - labeled
+      - unlabeled
+      - synchronize
+      - opened
+      - reopened
+      - unlocked
+    branches:    
+      - production
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: sleep 60

@@ -7,20 +7,25 @@ on:
       - unlabeled
       - synchronize
       - opened
-      - edited
-      - ready_for_review
       - reopened
       - unlocked
+    branches:    
+      - production
   pull_request_review:
     types:
       - submitted
+    branches:    
+      - production
   check_suite:
     types:
       - completed
+    branches:    
+      - staging
   status: {}
 jobs:
   automerge:
     runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'automerge') }}
     steps:
       - id: automerge
         name: automerge
@@ -30,4 +35,3 @@ jobs:
           MERGE_LABELS: automerge
           MERGE_METHOD: merge
           MERGE_DELETE_BRANCH: false
-          MERGE_REQUIRED_APPROVALS: 1
