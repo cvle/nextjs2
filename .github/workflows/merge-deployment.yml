@@ -16,7 +16,7 @@ jobs:
         id: check
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: Merge Deployment Attempt
+          name: Merge-Deployment-Attempt
           conclusion: success
       - name: automerge
         uses: "pascalgn/automerge-action@v0.15.3"
