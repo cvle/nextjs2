@@ -12,6 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ contains(github.event.pull_request.labels.*.name, 'merge deployment') }}
     steps:
+      - uses: LouisBrunner/checks-action@v1.2.0
+        id: check
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: automerge
+          conclusion: success
       - name: automerge
         uses: "pascalgn/automerge-action@v0.15.3"
         env:
@@ -21,3 +27,10 @@ jobs:
           MERGE_DELETE_BRANCH: false
           MERGE_ERROR_FAIL: true
           UPDATE_LABELS: "disable"
+      - uses: LouisBrunner/checks-action@v1.2.0
+        id: check
+        if: failure()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: automerge
+          conclusion: failure
