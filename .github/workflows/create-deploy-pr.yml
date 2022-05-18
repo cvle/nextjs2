@@ -20,10 +20,14 @@ jobs:
       # Then recreate from main.
       - name: Create new staging branch from main
         run: git checkout -b "staging"
-      - name: Fetch production branch
-        run: git pull origin production
+      - name: Checkout production branch
+        uses: actions/checkout@v3
+        with:
+          ref: production
+      - name: Switch to staging
+        run: git checkout staging
       - name: Merge production
-        run: git merge origin/production --ff -m "Merge branch 'production' into staging"
+        run: git merge production --ff -m "Merge branch 'production' into staging"
       - name: Force push changes
         run: git push --force --set-upstream origin staging
 
