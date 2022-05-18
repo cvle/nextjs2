@@ -1,7 +1,7 @@
 name: Create Deployment PR
 permissions: 
-   pull-requests: write
-   contents: write
+  pull-requests: write
+  contents: write
 on: workflow_dispatch
 
 jobs:
@@ -25,9 +25,13 @@ jobs:
       - name: Fetch production branch
         run: git fetch --no-tags --progress --no-recurse-submodules origin production
 
+      # The purpose of this is to merge previous merge commits
+      # from other deployments into the staging branch.
       - name: Merge production
+        id: merge
         run: git merge origin/production --ff -m "Merge branch 'production' into staging"
         continue-on-error: true
+      # Abort if there have been merge conflicts. They will appear on the PR.
       - name: Abort potential merge conflicts
         run: git merge --abort
         continue-on-error: true
