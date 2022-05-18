@@ -23,7 +23,7 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           MERGE_LABELS: merge deployment
-          MERGE_METHOD: merge
+          MERGE_METHOD: rebase
           MERGE_DELETE_BRANCH: false
           MERGE_ERROR_FAIL: true
           UPDATE_LABELS: "disable"
