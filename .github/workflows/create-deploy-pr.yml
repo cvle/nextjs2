@@ -22,7 +22,7 @@ jobs:
       - name: Create new staging branch from main
         run: git checkout -b "staging"
       - name: Fetch production branch
-        run: git fetch origin production
+        run: git fetch --no-tags --progress --no-recurse-submodules origin production
       - name: Merge production
         run: git merge origin/production --ff -m "Merge branch 'production' into staging"
       - name: Force push changes
