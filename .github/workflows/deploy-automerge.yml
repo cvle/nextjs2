@@ -36,3 +36,4 @@ jobs:
           MERGE_METHOD: merge
           MERGE_DELETE_BRANCH: false
           MERGE_ERROR_FAIL: true
+          UPDATE_LABELS: "disable"
