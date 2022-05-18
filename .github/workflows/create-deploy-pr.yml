@@ -11,6 +11,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: main
+          fetch-depth: 1
       # Prepare staging branch to point to HEAD of main.
 
       # Delete staging branch if it already exists.
@@ -19,7 +20,7 @@ jobs:
         continue-on-error: true
       # Then recreate from main.
       - name: Create new staging branch from main
-        run: git checkout -b staging
+        run: git checkout -b "staging"
       - name: Force push changes
         run: git push --force --set-upstream origin staging
 
