@@ -11,6 +11,7 @@ jobs:
     name: Require "merge deployment" label
     runs-on: ubuntu-latest
     steps:
+      - uses: hmarr/debug-action@v2
       - uses: mheap/github-action-required-labels@v1
         with:
           mode: exactly
