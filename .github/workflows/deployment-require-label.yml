@@ -1,5 +1,4 @@
 name: Deployment
-permissions: write-all
 on:
   pull_request:
     types:
@@ -8,7 +7,7 @@ on:
     branches:    
       - production
 jobs:
-  create-check:
+  require-label:
     name: Require "merge deployment" label
     runs-on: ubuntu-latest
     steps:
