@@ -12,11 +12,16 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'merge deployment') }}
     steps:
       - uses: LouisBrunner/checks-action@v1.2.0
-        id: check
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: merge-deployment-attempt
           conclusion: success
+        continue-on-error: true
+      - name: Find Merge check
+        id: check
+        run: |
+          id=$(curl -sH 'Accept: application/vnd.github.v3+json' 'https://api.github.com/repos/cvle/nextjs2/commits/staging/check-runs?check_name=merge-deployment-attempt' | jq '.check_runs[0].id')
+          echo "::set-output name=id::$id"
       - name: automerge
         uses: "pascalgn/automerge-action@v0.15.3"
         env:
