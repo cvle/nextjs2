@@ -1,0 +1,17 @@
+name: Merge Deployment Label
+permissions: write-all
+on:
+  pull_request:
+    types:
+      - labeled
+    branches:    
+      - production
+jobs:
+  automerge:
+    name: Merge Deployment Label
+    runs-on: ubuntu-latest
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'merge deployment') }}
+    steps:
+      - run: exit 0
+        if: ${{ contains(github.event.pull_request.labels.*.name, 'merge deployment') }}
+      - run: exit 1
