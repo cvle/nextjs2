@@ -4,24 +4,8 @@ on:
   pull_request:
     types:
       - labeled
-      - unlabeled
-      - synchronize
-      - opened
-      - reopened
-      - unlocked
     branches:    
       - production
-  pull_request_review:
-    types:
-      - submitted
-    branches:    
-      - production
-  check_suite:
-    types:
-      - completed
-    branches:    
-      - staging
-  status: {}
 jobs:
   automerge:
     runs-on: ubuntu-latest
