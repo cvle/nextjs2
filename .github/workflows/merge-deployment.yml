@@ -7,8 +7,7 @@ on:
     branches:    
       - production
 jobs:
-  automerge:
-    name: Merge Deployment
+  merge-deployment:
     runs-on: ubuntu-latest
     if: ${{ contains(github.event.pull_request.labels.*.name, 'merge deployment') }}
     steps:
@@ -16,7 +15,7 @@ jobs:
         id: check
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: Merge-Deployment-Attempt
+          name: merge-deployment-attempt
           conclusion: success
       - name: automerge
         uses: "pascalgn/automerge-action@v0.15.3"
