@@ -9,12 +9,12 @@ on:
       - production
 jobs:
   create-check:
-    name: Create Check
+    name: Create merge label check
     runs-on: ubuntu-latest
     if: ${{ contains(github.event.pull_request.labels.*.name, 'merge deployment') }}
     steps:
       - uses: LouisBrunner/checks-action@v1.2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: Wait for label
+          name: Wait for merge label
           status: in_progress
