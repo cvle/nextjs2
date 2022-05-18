@@ -14,27 +14,24 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-      - name: Set Github user
+      - name: Set Github User to github-actions
         run: >
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com" &&
           git config --local user.name "github-actions"
-      # Prepare staging branch to point to HEAD of main.
 
-      # Delete staging branch if it already exists.
-      - name: Delete staging branch if exists
-        run: git branch -D staging
-        continue-on-error: true
-      # Then recreate from main.
       - name: Create new staging branch from main
         run: git checkout -b "staging"
+
       - name: Fetch production branch
         run: git fetch --no-tags --progress --no-recurse-submodules origin production
+
       - name: Merge production
         run: git merge origin/production --ff -m "Merge branch 'production' into staging"
         continue-on-error: true
       - name: Abort potential merge conflicts
         run: git merge --abort
         continue-on-error: true
+
       - name: Force push changes
         run: git push --force --set-upstream origin staging
 
