@@ -16,4 +16,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           name: Merge Deployment Attempt
-          conclusion: neutral
+          status: in_progress
