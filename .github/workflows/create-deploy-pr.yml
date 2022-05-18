@@ -19,7 +19,9 @@ jobs:
         continue-on-error: true
       # Then recreate from main.
       - name: Create new staging branch from main
-        run: git checkout -b staging
+        run: git checkout -b "staging"
+      - name: Fetch production branch
+        run: git fetch origin production
       - name: Merge production
         run: git merge production --ff -m "Merge branch 'production' into staging"
       - name: Force push changes
