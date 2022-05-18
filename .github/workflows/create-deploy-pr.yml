@@ -1,7 +1,5 @@
 name: Create Deployment PR
 permissions: 
-   pull-requests: write
-   repository-projects: write
    contents: write
 on: workflow_dispatch
 
