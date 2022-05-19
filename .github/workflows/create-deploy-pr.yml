@@ -13,7 +13,6 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v3
         with:
-          ref: ${{ env.GITHUB_REF_NAME }}
           # Fetch deeply in order to allow merge functionality.
           fetch-depth: 0
       - name: Set Github User to github-actions
@@ -49,7 +48,7 @@ jobs:
           pr_title: "Deploy to Production"
           pr_body: |
             ###  Deploy to Production
-            Ref: ${{ env.GITHUB_REF_NAME }}
+            Ref: $GITHUB_REF_NAME
           pr_label: "deployment"
           pr_draft: false
           pr_allow_empty: false
