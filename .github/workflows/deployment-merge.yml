@@ -58,7 +58,8 @@ jobs:
           echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production ||
           echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production ||
           echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production
-      - uses: superbrothers/close-pull-request@v3
+      # Close Pull Request
+      - uses: peter-evans/close-pull@v2
         with:
           comment: "Merged 🚀"
 
