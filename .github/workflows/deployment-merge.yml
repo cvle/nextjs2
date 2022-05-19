@@ -21,6 +21,8 @@ jobs:
           --repo nextjs2
           --pull-request ${{ github.event.number }}
           --min-reviews 1
+        env:
+          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions-ecosystem/action-remove-labels@v1
         if: failure()
         with:
