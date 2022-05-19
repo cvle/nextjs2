@@ -9,10 +9,9 @@ jobs:
     name: Create Deployment PR
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout main branch
+      - name: Checkout branch
         uses: actions/checkout@v3
         with:
-          ref: main
           # Fetch deeply in order to allow merge functionality.
           fetch-depth: 0
       - name: Set Github User to github-actions
@@ -20,7 +19,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com" &&
           git config --local user.name "github-actions"
 
-      - name: Create new staging branch from main
+      - name: Create new staging branch
         run: git checkout -b "staging"
 
       - name: Fetch production branch
