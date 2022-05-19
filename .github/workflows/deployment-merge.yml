@@ -20,7 +20,6 @@ jobs:
         github.event.pull_request.state == 'open'
       }}
     steps:
-      - uses: hmarr/debug-action@v2
       - # Check for mergeability
         if: ${{ github.event.pull_request.mergeable != true }}
         run: echo "PR is not yet mergeable" && exit 1
@@ -51,11 +50,12 @@ jobs:
         id: merge
         run: git merge origin/staging --ff -m "Merge branch 'staging' into production"
 
-      # Push changes, Github will enforce required check runs here.
-      # Retries 3 times to accomodate pending check runs.
+      # Push changes, this fails when required status checks are missing.
+      # Retries 4 times to accomodate pending check runs.
       - name: Push changes
         run: >
           git push --set-upstream origin production ||
+          (echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production) ||
           (echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production) ||
           (echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production) ||
           (echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production)

@@ -9,7 +9,6 @@ jobs:
     name: Create Deployment PR
     runs-on: ubuntu-latest
     steps:
-      - uses: hmarr/debug-action@v2
       - name: Checkout main branch
         uses: actions/checkout@v3
         with:

@@ -16,7 +16,6 @@ jobs:
         github.event.pull_request.state == 'open'
       }}
     steps:
-      - uses: hmarr/debug-action@v2
       - uses: mheap/github-action-required-labels@v1
         with:
           mode: exactly
