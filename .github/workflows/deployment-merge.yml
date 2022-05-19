@@ -21,7 +21,7 @@ jobs:
           --repo ${{ github.event.pull_request.base.repo.name }}
           --pull-request ${{ github.event.number }}
           --min-reviews 1
-          --check 'Require "merge deployment" label'
+          --check 'xyz'
         env:
           GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions-ecosystem/action-remove-labels@v1
