@@ -14,18 +14,13 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'merge deployment') }}
     steps:
       - uses: hmarr/debug-action@v2
-      - # Check for mergeability
-        if: ${{ github.event.pull_request.mergeable != true }}
-        run: echo "PR is not yet mergeable" && exit 1
-      - id: reviews
-        uses: jrylan/github-action-reviews-counter@main
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - # Check for required reviews
-        if: ${{ steps.reviews.outputs.approved < 1 || steps.reviews.outputs.changes_requested > 0 }}
-        run: echo "At least 2 approval are required and no change request is allowed" && exit 1
-
-
+      - uses: actions/setup-node@v3
+      - run: >
+          npx is-mergeable 
+          --owner $GITHUB_REPOSITORY_OWNER
+          --repo nextjs2
+          --pull-request ${{ github.event.number }}
+          --min-reviews 1
       - uses: actions-ecosystem/action-remove-labels@v1
         if: failure()
         with:
