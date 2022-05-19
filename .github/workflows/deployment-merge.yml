@@ -14,21 +14,21 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'merge deployment') }}
     steps:
       - uses: hmarr/debug-action@v2
-      - uses: actions/setup-node@v3
-      - run: >
-          npx is-mergeable 
-          --owner $GITHUB_REPOSITORY_OWNER
-          --repo ${{ github.event.pull_request.base.repo.name }}
-          --pull-request ${{ github.event.number }}
-          --min-reviews 1
-          --check 'Require "merge deployment" label'
-        env:
-          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions-ecosystem/action-remove-labels@v1
-        if: failure()
-        with:
-          labels: merge deployment
 
+      # Check for mergeability
+      - if: ${{ github.event.pull_request.mergeable != true }}
+        run: echo "PR is not mergeable" && exit 1
+
+      # Check for required reviews
+      - id: reviews
+        uses: jrylan/github-action-reviews-counter@main
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }
+      - # Check for required reviews
+        if: ${{ steps.reviews.outputs.approved < 1 || steps.reviews.outputs.changes_requested > 0 }}
+        run: echo "Reviews condition not met" && exit 1
+
+      # Prepare git
       - name: Checkout production branch
         uses: actions/checkout@v3
         with:
@@ -41,11 +41,21 @@ jobs:
           git config --local user.name "github-actions"
       - name: Fetch staging branch
         run: git fetch --no-tags --progress --no-recurse-submodules origin staging
+      
+      # Merge
       - name: Merge staging into production
         id: merge
         run: git merge origin/staging --ff -m "Merge branch 'staging' into production"
+
+      # Push changes, Github will enforce required check runs here.
       - name: Push changes
         run: git push --set-upstream origin production
       - uses: superbrothers/close-pull-request@v3
         with:
           comment: "Merged 🚀"
+
+      # If anythin fails, remove the `merge deployment` label 
+      - uses: actions-ecosystem/action-remove-labels@v1
+        if: failure()
+        with:
+          labels: merge deployment
