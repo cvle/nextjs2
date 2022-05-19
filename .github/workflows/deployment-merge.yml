@@ -1,15 +1,24 @@
+# This workflow automatically merges a deployment pr when
+# it has minimum reviews as set below, and required status checks
+# have succeeded.
+#
+# This must NOT be set as required for the production branch
+# otherwise it will block the automerge.
+#
+# Instead use the `Require "merge deployment" label`.
 name: Deployment
 permissions:
-  pull-requests: write
   contents: write
+  pull-requests: write
 on:
   pull_request:
     types:
       - labeled
-    branches:    
+    branches:
       - production
 env:
-  MIN_REVIEWS: 1
+  # Set min required reviews here.
+  MIN_REVIEWS: 2
 jobs:
   merge:
     name: Merge
@@ -42,13 +51,12 @@ jobs:
         run: >
           git config --local user.email "github-actions[bot]@users.noreply.github.com" &&
           git config --local user.name "github-actions"
-      - name: Fetch staging branch
-        run: git fetch --no-tags --progress --no-recurse-submodules origin staging
-      
+      - name: Fetch pr branch
+        run: git fetch --no-tags --progress --no-recurse-submodules origin ${{ github.event.pull_request.head.ref }}
+
       # Merge
-      - name: Merge staging into production
-        id: merge
-        run: git merge origin/staging --ff -m "Merge branch 'staging' into production"
+      - name: Merge PR into production
+        run: git merge origin/${{ github.event.pull_request.head.ref }} --ff -m "Merge branch '${{ github.event.pull_request.head.ref }}' into production"
 
       # Push changes, this fails when required status checks are missing.
       # Retries 4 times to accomodate pending check runs.
@@ -64,7 +72,7 @@ jobs:
         with:
           comment: "Merged 🚀"
 
-      # If anythin fails, remove the `merge deployment` label 
+      # If anythin fails, remove the `merge deployment` label
       - uses: actions-ecosystem/action-remove-labels@v1
         if: failure()
         with:
