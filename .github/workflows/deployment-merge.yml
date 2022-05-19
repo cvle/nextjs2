@@ -48,7 +48,7 @@ jobs:
       - # Check for required reviews
         if: |-
           ${{
-            steps.required_review.outputs.count != "null" &&
+            steps.required_review.outputs.count != 'null' &&
             steps.reviews.outputs.approved < steps.required_review.outputs.count ||
             steps.reviews.outputs.changes_requested > 0 
           }}
