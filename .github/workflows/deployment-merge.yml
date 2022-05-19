@@ -23,7 +23,7 @@ jobs:
       - id: reviews
         uses: jrylan/github-action-reviews-counter@main
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - # Check for required reviews
         if: ${{ steps.reviews.outputs.approved < 1 || steps.reviews.outputs.changes_requested > 0 }}
         run: echo "Reviews condition not met" && exit 1
