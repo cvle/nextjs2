@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     if: |-
       ${{ 
-        contains(github.event.pull_request.labels.*.name, 'merge deployment') &&
+        github.event.label.name == 'merge deployment' &&
         github.event.pull_request.state == 'open'
       }}
     steps:
