@@ -9,7 +9,6 @@ jobs:
     name: Create Deployment PR
     runs-on: ubuntu-latest
     steps:
-      - uses: hmarr/debug-action@v2
       - name: Checkout branch
         uses: actions/checkout@v3
         with:
@@ -40,6 +39,7 @@ jobs:
       - name: Force push changes
         run: git push --force --set-upstream origin staging
 
+      - run: echo $GITHUB_REF_NAME;
       - name: Create Pull Request
         uses: repo-sync/pull-request@v2
         with:
@@ -48,7 +48,7 @@ jobs:
           pr_title: "Deploy to Production"
           pr_body: |
             ###  Deploy to Production
-            Ref: $GITHUB_REF_NAME
+            Ref: ${{ env.GITHUB_REF_NAME }}
           pr_label: "deployment"
           pr_draft: false
           pr_allow_empty: false
