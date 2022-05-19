@@ -21,7 +21,7 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - # Check for required reviews
-        if: ${{ steps.reviews.outputs.approved < 2 || steps.reviews.outputs.changes_requested > 0 }}
+        if: ${{ steps.reviews.outputs.approved < 1 || steps.reviews.outputs.changes_requested > 0 }}
         run: echo "At least 2 approval are required and no change request is allowed" && exit 1
 
 
