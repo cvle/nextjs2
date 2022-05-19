@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ contains(github.event.pull_request.labels.*.name, 'merge deployment') }}
     steps:
+      - uses: hmarr/debug-action@v2
       - # Check for mergeability
         if: ${{ github.event.pull_request.mergeable != true }}
         run: echo "PR is not yet mergeable" && exit 1
