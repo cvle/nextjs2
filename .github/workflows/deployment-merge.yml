@@ -36,6 +36,15 @@ jobs:
         uses: jrylan/github-action-reviews-counter@main
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - id: required_review
+        run: >
+          count=$(curl -s
+          -H "Accept: application/vnd.github.v3+json"
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+          https://api.github.com/repos/cvle/nextjs2/branches/vla/protection |
+          jq ".required_pull_request_reviews.required_approving_review_count" -M);
+          echo "::set-output name=count::$count"
+      - run: echo ${{ steps.required_review.outputs.count }}
       - # Check for required reviews
         if: ${{ steps.reviews.outputs.approved < env.MIN_REVIEWS || steps.reviews.outputs.changes_requested > 0 }}
         run: echo "At least $MIN_REVIEWS approval are required and no change request is allowed" && exit 1

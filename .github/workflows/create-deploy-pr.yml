@@ -49,7 +49,6 @@ jobs:
           pr_title: "Deploy to Production"
           pr_body: |
             ###  Deploy to Production
-            Ref: ${{ env.GITHUB_REF_NAME }}
           pr_label: "deployment"
           pr_draft: false
           pr_allow_empty: false
