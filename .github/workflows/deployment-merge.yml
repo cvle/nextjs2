@@ -13,15 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ contains(github.event.pull_request.labels.*.name, 'merge deployment') }}
     steps:
-      - name: automerge
-        uses: "pascalgn/automerge-action@v0.15.3"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MERGE_LABELS: merge deployment
-          MERGE_METHOD: merge
-          MERGE_DELETE_BRANCH: false
-          MERGE_ERROR_FAIL: true
-          UPDATE_LABELS: disable
+      # Uses .mergepal.yml for additional configurations.
+      - uses: maxkomarychev/merge-pal-action@v0.5.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions-ecosystem/action-remove-labels@v1
         if: failure()
         with:
