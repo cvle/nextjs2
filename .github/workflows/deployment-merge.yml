@@ -13,10 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ contains(github.event.pull_request.labels.*.name, 'merge deployment') }}
     steps:
-      # Uses .mergepal.yml for additional configurations.
-      - uses: maxkomarychev/merge-pal-action@v0.5.1
+      - # Check for mergeability
+        if: ${{ github.event.pull_request.mergeable != true }}
+        run: echo "PR is not yet mergeable" && exit 1
+      - id: reviews
+        uses: jrylan/github-action-reviews-counter@main
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - # Check for required reviews
+        if: ${{ steps.reviews.outputs.approved < 2 || steps.reviews.outputs.changes_requested > 0 }}
+        run: echo "At least 2 approval are required and no change request is allowed" && exit 1
+
+
       - uses: actions-ecosystem/action-remove-labels@v1
         if: failure()
         with:
