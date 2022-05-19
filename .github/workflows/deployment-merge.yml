@@ -7,6 +7,8 @@ on:
       - labeled
     branches:    
       - production
+env:
+  MIN_REVIEWS: 1
 jobs:
   merge:
     name: Merge
@@ -25,7 +27,7 @@ jobs:
           --repo ${{ github.event.pull_request.base.repo.name }}
           --pull-request ${{ github.event.number }}
           --check 'Require "merge deployment" label'
-          --min-reviews 1
+          --min-reviews $MIN_REVIEWS
         env:
           GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

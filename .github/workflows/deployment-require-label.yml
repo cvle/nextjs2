@@ -17,6 +17,7 @@ jobs:
       }}
     steps:
       - uses: hmarr/debug-action@v2
+      - run: sleep 30
       - uses: mheap/github-action-required-labels@v1
         with:
           mode: exactly
