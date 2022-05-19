@@ -18,7 +18,7 @@ on:
       - production
 env:
   # Set min required reviews here.
-  MIN_REVIEWS: 2
+  MIN_REVIEWS: 1
 jobs:
   merge:
     name: Merge
