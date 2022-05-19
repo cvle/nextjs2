@@ -70,7 +70,7 @@ jobs:
 
       # Merge
       - name: Merge PR into production
-        run: git merge origin/${{ github.event.pull_request.head.ref }} --ff -m "Merge branch '${{ github.event.pull_request.head.ref }}' into production"
+        run: git merge origin/${{ github.event.pull_request.head.ref }} -m "Merge branch '${{ github.event.pull_request.head.ref }}' into production"
 
       # Push changes, this fails when required status checks are missing.
       # Retries 4 times to accomodate pending check runs.
