@@ -1,5 +1,6 @@
 name: Deployment
 permissions:
+  pull-requests: write
   contents: write
 on:
   pull_request:
@@ -55,9 +56,9 @@ jobs:
       - name: Push changes
         run: >
           git push --set-upstream origin production ||
-          echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production ||
-          echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production ||
-          echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production
+          (echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production) ||
+          (echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production) ||
+          (echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production)
       # Close Pull Request
       - uses: peter-evans/close-pull@v2
         with:
