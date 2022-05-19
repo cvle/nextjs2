@@ -11,22 +11,22 @@ jobs:
   merge:
     name: Merge
     runs-on: ubuntu-latest
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'merge deployment') }}
+    if: |-
+      ${{ 
+        contains(github.event.pull_request.labels.*.name, 'merge deployment') &&
+        github.event.pull_request.state == 'open'
+      }}
     steps:
       - uses: hmarr/debug-action@v2
-
-      # Check for mergeability
-      - if: ${{ github.event.pull_request.mergeable != true }}
-        run: echo "PR is not mergeable" && exit 1
-
-      # Check for required reviews
-      - id: reviews
-        uses: jrylan/github-action-reviews-counter@main
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - # Check for required reviews
-        if: ${{ steps.reviews.outputs.approved < 1 || steps.reviews.outputs.changes_requested > 0 }}
-        run: echo "Reviews condition not met" && exit 1
+      - uses: actions/setup-node@v3
+      - run: >
+          npx is-mergeable 
+          --owner $GITHUB_REPOSITORY_OWNER
+          --repo ${{ github.event.pull_request.base.repo.name }}
+          --pull-request ${{ github.event.number }}
+          --min-reviews 1
+        env:
+          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Prepare git
       - name: Checkout production branch
