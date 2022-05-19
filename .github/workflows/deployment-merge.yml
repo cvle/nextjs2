@@ -52,7 +52,10 @@ jobs:
 
       # Push changes, Github will enforce required check runs here.
       - name: Push changes
-        run: git push --set-upstream origin production
+        # Pushes onces and tries again after 30 seconds.
+        run: >
+          git push --set-upstream origin production ||
+          sleep 30 && git push --set-upstream origin production
       - uses: superbrothers/close-pull-request@v3
         with:
           comment: "Merged 🚀"
