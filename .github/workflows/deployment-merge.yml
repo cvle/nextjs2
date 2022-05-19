@@ -28,7 +28,7 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - # Check for required reviews
-        if: ${{ steps.reviews.outputs.approved < $MIN_REVIEWS || steps.reviews.outputs.changes_requested > 0 }}
+        if: ${{ steps.reviews.outputs.approved < env.MIN_REVIEWS || steps.reviews.outputs.changes_requested > 0 }}
         run: echo "At least $MIN_REVIEWS approval are required and no change request is allowed" && exit 1
 
       # Prepare git
