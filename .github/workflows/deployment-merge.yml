@@ -20,16 +20,16 @@ jobs:
       }}
     steps:
       - uses: hmarr/debug-action@v2
-      - uses: actions/setup-node@v3
-      - run: >
-          npx is-mergeable 
-          --owner $GITHUB_REPOSITORY_OWNER
-          --repo ${{ github.event.pull_request.base.repo.name }}
-          --pull-request ${{ github.event.number }}
-          --check 'Require "merge deployment" label'
-          --min-reviews $MIN_REVIEWS
-        env:
-          GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - # Check for mergeability
+        if: ${{ github.event.pull_request.mergeable != true }}
+        run: echo "PR is not yet mergeable" && exit 1
+      - id: reviews
+        uses: jrylan/github-action-reviews-counter@main
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - # Check for required reviews
+        if: ${{ steps.reviews.outputs.approved < $MIN_REVIEWS || steps.reviews.outputs.changes_requested > 0 }}
+        run: echo "At least $MIN_REVIEWS approval are required and no change request is allowed" && exit 1
 
       # Prepare git
       - name: Checkout production branch
