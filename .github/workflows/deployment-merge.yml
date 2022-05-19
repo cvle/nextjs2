@@ -1,5 +1,6 @@
 name: Deployment
 permissions:
+  pull-requests: write
   contents: write
 on:
   pull_request:
@@ -7,21 +8,63 @@ on:
       - labeled
     branches:    
       - production
+env:
+  MIN_REVIEWS: 1
 jobs:
   merge:
     name: Merge
     runs-on: ubuntu-latest
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'merge deployment') }}
+    if: |-
+      ${{ 
+        github.event.label.name == 'merge deployment' &&
+        github.event.pull_request.state == 'open'
+      }}
     steps:
-      - name: automerge
-        uses: "pascalgn/automerge-action@v0.15.3"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MERGE_LABELS: merge deployment
-          MERGE_METHOD: merge
-          MERGE_DELETE_BRANCH: false
-          MERGE_ERROR_FAIL: true
-          UPDATE_LABELS: disable
+      - uses: hmarr/debug-action@v2
+      - # Check for mergeability
+        if: ${{ github.event.pull_request.mergeable != true }}
+        run: echo "PR is not yet mergeable" && exit 1
+      - id: reviews
+        uses: jrylan/github-action-reviews-counter@main
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - # Check for required reviews
+        if: ${{ steps.reviews.outputs.approved < env.MIN_REVIEWS || steps.reviews.outputs.changes_requested > 0 }}
+        run: echo "At least $MIN_REVIEWS approval are required and no change request is allowed" && exit 1
+
+      # Prepare git
+      - name: Checkout production branch
+        uses: actions/checkout@v3
+        with:
+          ref: production
+          # Fetch deeply in order to allow merge functionality.
+          fetch-depth: 0
+      - name: Set Github User to github-actions
+        run: >
+          git config --local user.email "github-actions[bot]@users.noreply.github.com" &&
+          git config --local user.name "github-actions"
+      - name: Fetch staging branch
+        run: git fetch --no-tags --progress --no-recurse-submodules origin staging
+      
+      # Merge
+      - name: Merge staging into production
+        id: merge
+        run: git merge origin/staging --ff -m "Merge branch 'staging' into production"
+
+      # Push changes, Github will enforce required check runs here.
+      # Retries 3 times to accomodate pending check runs.
+      - name: Push changes
+        run: >
+          git push --set-upstream origin production ||
+          (echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production) ||
+          (echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production) ||
+          (echo "Failed, will try again..." && sleep 10 && git push --set-upstream origin production)
+      # Close Pull Request
+      - uses: peter-evans/close-pull@v2
+        with:
+          comment: "Merged 🚀"
+
+      # If anythin fails, remove the `merge deployment` label 
       - uses: actions-ecosystem/action-remove-labels@v1
         if: failure()
         with:

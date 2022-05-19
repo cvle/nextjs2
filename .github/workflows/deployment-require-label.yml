@@ -10,7 +10,11 @@ jobs:
   require-label:
     name: Require "merge deployment" label
     runs-on: ubuntu-latest
-    if: ${{ github.event.label.name == 'merge deployment' }}
+    if: |-
+      ${{ 
+        github.event.label.name == 'merge deployment' &&
+        github.event.pull_request.state == 'open'
+      }}
     steps:
       - uses: hmarr/debug-action@v2
       - uses: mheap/github-action-required-labels@v1
