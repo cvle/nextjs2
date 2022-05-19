@@ -9,7 +9,8 @@ jobs:
     name: Create Deployment PR
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout ${{ env.GITHUB_REF_NAME }} branch
+      - uses: hmarr/debug-action@v2
+      - name: Checkout branch
         uses: actions/checkout@v3
         with:
           ref: ${{ env.GITHUB_REF_NAME }}
@@ -20,7 +21,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com" &&
           git config --local user.name "github-actions"
 
-      - name: Create new staging branch from ${{ env.GITHUB_REF_NAME }}
+      - name: Create new staging branch
         run: git checkout -b "staging"
 
       - name: Fetch production branch
