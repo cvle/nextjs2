@@ -32,27 +32,6 @@ jobs:
       - # Check for mergeability
         if: ${{ github.event.pull_request.mergeable != true }}
         run: echo "PR is not yet mergeable" && exit 1
-      - id: reviews
-        uses: jrylan/github-action-reviews-counter@main
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-      - id: required_review
-        run: >
-          count=$(curl -s
-          -H "Accept: application/vnd.github.v3+json"
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
-          https://api.github.com/repos/cvle/nextjs2/branches/production/protection |
-          jq ".required_pull_request_reviews.required_approving_review_count" -M);
-          echo "::set-output name=count::$count"
-      - run: echo ${{ steps.required_review.outputs.count }}
-      - # Check for required reviews
-        if: |-
-          ${{
-            steps.required_review.outputs.count != 'null' &&
-            steps.reviews.outputs.approved < steps.required_review.outputs.count ||
-            steps.reviews.outputs.changes_requested > 0 
-          }}
-        run: echo "At least ${{ steps.required_review.outputs.count }} approval are required and no change request is allowed" && exit 1
 
       # Prepare git
       - name: Checkout production branch
@@ -70,7 +49,7 @@ jobs:
 
       # Merge
       - name: Merge PR into production
-        run: git merge origin/${{ github.event.pull_request.head.ref }} -m "Merge branch '${{ github.event.pull_request.head.ref }}' into production"
+        run: git merge origin/${{ github.event.pull_request.head.ref }} --ff -m "Merge branch '${{ github.event.pull_request.head.ref }}' into production"
 
       # Push changes, this fails when required status checks are missing.
       # Retries 4 times to accomodate pending check runs.
